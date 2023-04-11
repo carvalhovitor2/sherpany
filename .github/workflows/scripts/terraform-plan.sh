@@ -2,4 +2,4 @@
 
 cd terraform
 terraform init
-terraform plan
+terraform plan -out=plan.out
