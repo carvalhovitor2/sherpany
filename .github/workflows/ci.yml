@@ -43,6 +43,9 @@ jobs:
   infrastructure_assessment:
     needs: terraform_plan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - name: Setup Infracost
         uses: infracost/actions/setup@v2
