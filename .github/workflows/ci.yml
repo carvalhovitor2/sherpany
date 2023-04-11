@@ -40,24 +40,29 @@ jobs:
         name: tfplan
         path: terraform/plan.out
 
-        #  infrastructure_assessment:
-        #    needs: terraform_plan
-        #    runs-on: ubuntu-latest
-        #    steps:
-        #    - name: Checkout repository
-        #      uses: actions/checkout@v2
-        #
-        #    - name: Download Terraform Plan
-        #      uses: actions/download-artifact@v2
-        #      with:
-        #        name: plan.out
-        #
-        #    - name: Run infrastructure assessment
-        #      run: ./.github/workflows/scripts/terraform-assess.sh
-        #
+  infrastructure_assessment:
+    needs: terraform_plan
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Download Terraform Plan
+      uses: actions/download-artifact@v2
+      with:
+        name: tfplan
+
+    - name: Setup Infracost
+      uses: infracost/setup-infracost@v1
+      with:
+        api_key: ${{ secrets.INFRACOST_API_KEY }}
+
+    - name: Run infrastructure assessment
+      run: ./.github/workflows/scripts/terraform-assess.sh
+
   terraform_apply:
     if: github.ref == 'refs/heads/main'
-    needs: terraform_plan
+    needs: infrastructure_assessment
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
