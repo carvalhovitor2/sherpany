@@ -24,25 +24,28 @@ jobs:
     - name: Run validations
       run: ./.github/workflows/scripts/validate.sh
 
-        #  terraform_plan:
-        #    needs: validations
-        #    runs-on: ubuntu-latest
-        #    steps:
-        #    - name: Checkout repository
-        #      uses: actions/checkout@v2
-        #
-        #    - name: Setup Terraform
-        #      uses: hashicorp/setup-terraform@v1
-        #
-        #    - name: Terraform Plan
-        #      run: ./.github/workflow/scripts/terraform-plan.sh
-        #
-        #    - name: Upload Terraform Plan
-        #      uses: actions/upload-artifact@v2
-        #      with:
-        #        name: tfplan
-        #        path: tfplan
-        #
+  terraform_plan:
+    needs: validations
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Terraform Plan
+      run: ./.github/workflow/scripts/terraform-plan.sh
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.API_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
+
+    - name: Upload Terraform Plan
+      uses: actions/upload-artifact@v2
+      with:
+        name: tfplan
+        path: tfplan
+
         #  infrastructure_assessment:
         #    needs: terraform_plan
         #    runs-on: ubuntu-latest
