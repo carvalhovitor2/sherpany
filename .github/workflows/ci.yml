@@ -63,7 +63,7 @@ jobs:
         #
   terraform_apply:
     if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'yes' }}
-    needs: infrastructure_assessment
+    needs: terraform_plan
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
