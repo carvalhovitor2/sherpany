@@ -16,7 +16,7 @@ on:
 
 jobs:
   validations:
-    runs-on: ubuntu-latest
+    runs-on: rockylinux
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -26,7 +26,7 @@ jobs:
 
   terraform_plan:
     needs: validations
-    runs-on: ubuntu-latest
+    runs-on: rockylinux
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -45,7 +45,7 @@ jobs:
 
   infrastructure_assessment:
     needs: terraform_plan
-    runs-on: ubuntu-latest
+    runs-on: rockylinux
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -61,7 +61,7 @@ jobs:
   terraform_apply:
     if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'yes' }}
     needs: infrastructure_assessment
-    runs-on: ubuntu-latest
+    runs-on: rockylinux
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -80,7 +80,7 @@ jobs:
 
   build_images:
     needs: terraform_apply
-    runs_on: ubuntu-latest
+    runs_on: rockylinux
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -88,7 +88,7 @@ jobs:
 
   helm_install:
     needs: build_images
-    runs-on: ubuntu-latest
+    runs-on: rockylinux
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
