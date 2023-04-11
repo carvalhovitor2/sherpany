@@ -1,0 +1,100 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Confirm to deploy (yes/no)'
+        required: true
+        default: 'no'
+
+jobs:
+  validations:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run validations
+      run: ./validations.sh
+
+  terraform_plan:
+    needs: validations
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Terraform Plan
+      run: ./.github/workflow/scripts/terraform-plan.sh
+
+    - name: Upload Terraform Plan
+      uses: actions/upload-artifact@v2
+      with:
+        name: tfplan
+        path: tfplan
+
+  infrastructure_assessment:
+    needs: terraform_plan
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Download Terraform Plan
+      uses: actions/download-artifact@v2
+      with:
+        name: plan.out
+
+    - name: Run infrastructure assessment
+      run: ./.github/workflow/scripts/terraform-assess.sh
+
+  terraform_apply:
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'yes' }}
+    needs: infrastructure_assessment
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Download Terraform Plan
+      uses: actions/download-artifact@v2
+      with:
+        name: tfplan
+
+    - name: Terraform Apply
+      run: ./.github/workflow/scripts/terraform-apply.sh
+
+
+  build_images:
+    needs: terraform_apply
+    runs_on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+
+  helm_install:
+    needs: build_images
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Helm
+      uses: azure/setup-helm@v1
+
+    - name: Helm Install
+      run: ./.github/workflow/scripts/helm-install.sh
