@@ -16,8 +16,8 @@ resource "aws_security_group" "worker-nodes" {
   #https requests from the lb to the ingress controller
   ingress {
     description = "30081 from LB subnet"
-    from_port   = 30081
-    to_port     = 30081
+    from_port   = 30443
+    to_port     = 30443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
