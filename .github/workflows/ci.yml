@@ -39,6 +39,13 @@ jobs:
       with:
         name: tfplan
         path: terraform/plan.out
+        
+    - name: Upload Terraform Plan json
+      uses: actions/upload-artifact@v2
+      with:
+        name: json-tfplan
+        path: terraform/plan.json
+
 
   infrastructure_assessment:
     needs: terraform_plan
@@ -60,16 +67,11 @@ jobs:
       - name: Download Terraform Plan
         uses: actions/download-artifact@v2
         with:
-          name: tfplan
-
-
-      - name: Debug
-        run: |
-          ls -la 
+          name: json-tfplan
 
       - name: Generate Infracost diff
         run: |
-          infracost diff --path=plan.out \
+          infracost diff --path=plan.json \
                           --format=json \
                           --out-file=/tmp/infracost.json
 
