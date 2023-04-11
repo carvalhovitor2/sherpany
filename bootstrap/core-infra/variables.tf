@@ -1,0 +1,3 @@
+variable "system" {
+   type = string
+}
