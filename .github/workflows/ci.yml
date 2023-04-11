@@ -61,25 +61,28 @@ jobs:
         #    - name: Run infrastructure assessment
         #      run: ./.github/workflows/scripts/terraform-assess.sh
         #
-        #  terraform_apply:
-        #    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'yes' }}
-        #    needs: infrastructure_assessment
-        #    runs-on: ubuntu-latest
-        #    steps:
-        #    - name: Checkout repository
-        #      uses: actions/checkout@v2
-        #
-        #    - name: Setup Terraform
-        #      uses: hashicorp/setup-terraform@v1
-        #
-        #    - name: Download Terraform Plan
-        #      uses: actions/download-artifact@v2
-        #      with:
-        #        name: tfplan
-        #
-        #    - name: Terraform Apply
-        #      run: ./.github/workflows/scripts/terraform-apply.sh
-        #
+  terraform_apply:
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'yes' }}
+    needs: infrastructure_assessment
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Download Terraform Plan
+      uses: actions/download-artifact@v2
+      with:
+        name: tfplan
+
+    - name: Terraform Apply
+      run: ./.github/workflows/scripts/terraform-apply.sh
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.API_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
+
         #
         #  build_images:
         #    needs: terraform_apply
