@@ -6,3 +6,7 @@ variable "region" {
 variable "system" {
   type = string
 }
+
+variable "aws_auth_users" {
+  type = list(any)
+}

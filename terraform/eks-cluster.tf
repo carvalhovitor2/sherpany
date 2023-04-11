@@ -26,7 +26,7 @@ module "eks" {
   create_aws_auth_configmap = true
   manage_aws_auth_configmap = true
 
-  aws_auth_roles = concat(var.aws_auth_roles, [
+  aws_auth_roles = [
 
     {
       rolearn  = "${aws_iam_role.eks_nodes.arn}"
@@ -38,7 +38,9 @@ module "eks" {
       username = "system:node:{{EC2PrivateDNSName}}"
       groups   = ["system:nodes", "system:bootsrappers"]
     }
-  ])
+  ]
+
+  aws_auth_users = var.aws_auth_users
 
   tags = {
     system = var.system
