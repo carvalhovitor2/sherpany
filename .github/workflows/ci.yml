@@ -22,7 +22,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Run validations
-      run: ./.github/workflow/scripts/validate.sh
+      run: ./.github/workflows/scripts/validate.sh
 
         #  terraform_plan:
         #    needs: validations
