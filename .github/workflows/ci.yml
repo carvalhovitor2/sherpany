@@ -44,21 +44,39 @@ jobs:
     needs: terraform_plan
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v2
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
 
-    - name: Download Terraform Plan
-      uses: actions/download-artifact@v2
-      with:
-        name: tfplan
+      - name: Checkout base branch
+        uses: actions/checkout@v3
+        with:
+          ref: '${{ github.event.pull_request.base.ref }}'
 
-    - name: Setup Infracost
-      uses: infracost/setup-infracost@v1
-      with:
-        api_key: ${{ secrets.INFRACOST_API_KEY }}
+      - name: Generate Infracost cost estimate baseline
+        run: |
+          infracost breakdown --path=plan.out \
+                              --format=json \
+                              --out-file=/tmp/infracost-base.json
 
-    - name: Run infrastructure assessment
-      run: ./.github/workflows/scripts/terraform-assess.sh
+      - name: Checkout PR branch
+        uses: actions/checkout@v3
+
+      - name: Generate Infracost diff
+        run: |
+          infracost diff --path=plan.out \
+                          --format=json \
+                          --compare-to=/tmp/infracost-base.json \
+                          --out-file=/tmp/infracost.json
+
+      - name: Post Infracost comment
+        run: |
+            infracost comment github --path=/tmp/infracost.json \
+                                     --repo=$GITHUB_REPOSITORY \
+                                     --github-token=${{github.token}} \
+                                     --pull-request=${{github.event.pull_request.number}} \
+                                     --behavior=update
 
   terraform_apply:
     if: github.ref == 'refs/heads/main'
