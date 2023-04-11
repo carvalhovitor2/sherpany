@@ -35,7 +35,7 @@ jobs:
       uses: hashicorp/setup-terraform@v1
 
     - name: Terraform Plan
-      run: ./.github/workflow/scripts/terraform-plan.sh
+      run: ./.github/workflows/scripts/terraform-plan.sh
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.API_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
@@ -59,7 +59,7 @@ jobs:
         #        name: plan.out
         #
         #    - name: Run infrastructure assessment
-        #      run: ./.github/workflow/scripts/terraform-assess.sh
+        #      run: ./.github/workflows/scripts/terraform-assess.sh
         #
         #  terraform_apply:
         #    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'yes' }}
@@ -78,7 +78,7 @@ jobs:
         #        name: tfplan
         #
         #    - name: Terraform Apply
-        #      run: ./.github/workflow/scripts/terraform-apply.sh
+        #      run: ./.github/workflows/scripts/terraform-apply.sh
         #
         #
         #  build_images:
@@ -100,4 +100,4 @@ jobs:
         #      uses: azure/setup-helm@v1
         #
         #    - name: Helm Install
-        #      run: ./.github/workflow/scripts/helm-install.sh
+        #      run: ./.github/workflows/scripts/helm-install.sh
