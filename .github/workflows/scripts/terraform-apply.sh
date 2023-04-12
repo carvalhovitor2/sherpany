@@ -1,3 +1,4 @@
 #!/bin/bash
 
-terraform apply -input=false plan.out
+cd terraform/
+terraform apply -input=false ../plan.out
