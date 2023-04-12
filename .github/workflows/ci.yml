@@ -48,6 +48,7 @@ jobs:
 
 
   infrastructure_assessment:
+    if: github.event_name == 'pull_request'
     needs: terraform_plan
     runs-on: ubuntu-latest
     permissions:
@@ -85,7 +86,7 @@ jobs:
 
   terraform_apply:
     if: github.ref == 'refs/heads/main'
-    needs: infrastructure_assessment
+    needs: terraform_plan
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
