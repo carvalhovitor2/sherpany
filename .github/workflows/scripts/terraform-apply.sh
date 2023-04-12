@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ls
+terraform apply -input=false plan.out

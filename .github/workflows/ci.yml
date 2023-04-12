@@ -39,6 +39,13 @@ jobs:
       with:
         name: tfplan
         path: terraform/plan.out
+        
+    - name: Upload Terraform Plan json
+      uses: actions/upload-artifact@v2
+      with:
+        name: json-tfplan
+        path: terraform/plan.json
+
 
   infrastructure_assessment:
     needs: terraform_plan
@@ -57,20 +64,15 @@ jobs:
         with:
           ref: '${{ github.event.pull_request.base.ref }}'
 
-      - name: Generate Infracost cost estimate baseline
-        run: |
-          infracost breakdown --path=plan.out \
-                              --format=json \
-                              --out-file=/tmp/infracost-base.json
-
-      - name: Checkout PR branch
-        uses: actions/checkout@v3
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v2
+        with:
+          name: json-tfplan
 
       - name: Generate Infracost diff
         run: |
-          infracost diff --path=plan.out \
+          infracost diff --path=plan.json \
                           --format=json \
-                          --compare-to=/tmp/infracost-base.json \
                           --out-file=/tmp/infracost.json
 
       - name: Post Infracost comment
@@ -124,3 +126,4 @@ jobs:
         #
         #    - name: Helm Install
         #      run: ./.github/workflows/scripts/helm-install.sh
+        #
