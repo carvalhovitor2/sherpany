@@ -152,6 +152,24 @@ jobs:
         path: web.tar
   
 
+  scan_image:
+    needs: build_images
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: web
+        path: artifact
+  
+    - name: Load container image from tar file
+      run: docker load -i artifact/web.tar
+  
+    - name: Scan container image for vulnerabilities
+      run: |
+        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy --exit-code 1 --severity CRITICAL sherpany/web:lates
+
+
         #
         #
         #  helm_install:
