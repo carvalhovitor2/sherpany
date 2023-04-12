@@ -124,10 +124,10 @@ jobs:
 
     - name: Build Docker image
       uses: docker/build-push-action@v2
-        with:
-          context: polls/
-          tags: sherpany/my-image:latest
-          target: test 
+      with:
+        context: polls/
+        tags: sherpany/my-image:latest
+        target: test 
 
         #
         #
