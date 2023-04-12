@@ -2,7 +2,7 @@ module "nlb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 8.0"
 
-  name = "${var.system}"
+  name = var.system
 
   load_balancer_type = "network"
 
@@ -33,7 +33,7 @@ module "nlb" {
   ]
 
   tags = {
-    system      = "${var.system}"
+    system    = "${var.system}"
     Terraform = "True"
   }
 }

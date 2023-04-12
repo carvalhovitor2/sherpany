@@ -15,8 +15,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+    
     - name: Run validations
       run: ./.github/workflows/scripts/validate.sh
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.API_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
 
   terraform_plan:
     needs: validations
