@@ -127,7 +127,6 @@ jobs:
       with:
         context: polls/
         tags: sherpany/my-image:latest
-        target: test 
 
         #
         #
