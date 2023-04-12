@@ -16,7 +16,7 @@ module "eks_managed_node_group_spot" {
 
   min_size     = 1
   max_size     = 3
-  desired_size = 2
+  desired_size = 1
 
   instance_types = [
     "m5.small", #I know these are completely different instances, they're just here for the sake of making sure that there is at least one of these spot instances available
