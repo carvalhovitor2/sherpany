@@ -6,4 +6,4 @@ terraform validate
 
 terraform fmt -check=true -diff=true -recursive=true
 
-terraform validate -var-file=my-variables.tfvars
+terraform validate -var-file=terraform.tfvars
