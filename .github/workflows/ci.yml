@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  validations:
+  sanity:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -25,7 +25,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
 
   terraform_plan:
-    needs: validations
+    needs: sanity
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -53,7 +53,7 @@ jobs:
         path: terraform/plan.json
 
 
-  infrastructure_assessment:
+  terraform_assess:
     if: github.event_name == 'pull_request'
     needs: terraform_plan
     runs-on: ubuntu-latest
@@ -112,13 +112,23 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.API_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
 
-        #
-        #  build_images:
-        #    needs: terraform_apply
-        #    runs_on: ubuntu-latest
-        #    steps:
-        #    - name: Checkout repository
-        #      uses: actions/checkout@v2
+
+# Build, test, release, deploy
+
+  build_images:
+    needs: sanity
+    runs_on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v2
+        with:
+          context: polls/
+          tags: sherpany/my-image:latest
+          target: test 
+
         #
         #
         #  helm_install:
