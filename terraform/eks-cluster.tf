@@ -46,3 +46,12 @@ module "eks" {
     system = var.system
   }
 }
+
+resource "kubernetes_namespace" "sherpany" {
+  metadata {
+    name = var.system
+    labels = {
+      team = var.system
+    }
+  }
+}
