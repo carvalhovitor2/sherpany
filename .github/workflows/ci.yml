@@ -190,6 +190,7 @@ jobs:
       with:
         access-key-id: ${{ secrets.API_KEY }}
         secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+        region: eu-central-1
   
     - name: Tag and push container image to ECR
       uses: docker/build-push-action@v2
