@@ -4,7 +4,7 @@ resource "random_password" "secret_key" {
 
 resource "kubernetes_secret" "secret_key" {
   metadata {
-    name      = "my-secret-key"
+    name      = "${var.system}-secrets"
     namespace = kubernetes_namespace.sherpany.metadata.0.name
   }
 
