@@ -170,6 +170,38 @@ jobs:
         docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image --exit-code 1 --severity CRITICAL sherpany/web:latest --ignore-unfixed
 
 
+
+  push_image:
+    needs: scan_image
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: web
+        path: artifact
+  
+    - name: Load container image from tar file
+      run: docker load -i artifact/web.tar
+  
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+      with:
+        access-key-id: ${{ secrets.API_KEY }}
+        secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+  
+    - name: Tag and push container image to ECR
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: |
+          ${{ steps.login-ecr.outputs.registry }}/sherpany/web:${{ github.sha }}
+          ${{ steps.login-ecr.outputs.registry }}/sherpany/web:latest
+        load: true
+
+
         #
         #
         #  helm_install:
