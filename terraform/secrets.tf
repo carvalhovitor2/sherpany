@@ -27,9 +27,3 @@ resource "kubernetes_secret" "postgres_pass" {
     postgres_password = random_password.postgres_pass.result
   }
 }
-
-resource "kubernetes_namespace" "sherpany" {
-  metadata {
-    name = var.system
-  }
-}
