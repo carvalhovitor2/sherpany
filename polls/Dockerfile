@@ -28,3 +28,5 @@ WORKDIR /usr/app
 COPY --from=build /usr/app/venv ./venv
 COPY . .
 ENV PATH="/usr/app/venv/bin:$PATH"
+
+EXPOSE 8000
