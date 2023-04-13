@@ -8,7 +8,7 @@ resource "kubernetes_secret" "secret_key" {
     namespace = kubernetes_namespace.sherpany.metadata.0.name
   }
 
-  string_data = {
+  data = {
     secret_key = random_password.secret_key.result
   }
 }
@@ -23,7 +23,7 @@ resource "kubernetes_secret" "postgres_pass" {
     namespace = kubernetes_namespace.sherpany.metadata.0.name
   }
 
-  string_data = {
+  data = {
     postgres_password = random_password.postgres_pass.result
   }
 }
