@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: "{{ .Values.system.name }}"
+  name: "{{ .Values.system.name }}-web"
+spec:
+  rules:
+  - host: "polls.{{ .Values.system.name }}.sillydomain.com"
+    http:
+      paths:
+      - path: /polls
+        pathType: Prefix
+        backend:
+          service:
+            name: "{{ .Values.system.name }}-web"
+            port:
+              number: 80
