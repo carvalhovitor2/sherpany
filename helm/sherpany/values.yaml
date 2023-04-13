@@ -1,0 +1,12 @@
+system:
+  name: "sherpany" # Application name
+  web:
+    image: ""
+    replicaCount: 1 # Number of replicas for the web deployment
+  db:
+    image: ""
+    user: postgres # Database user
+    database: pollsdb # Database name
+    host: postgres-db # Database host
+    port: 5432 # Database port
+
