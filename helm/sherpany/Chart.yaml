@@ -1,0 +1,4 @@
+apiVersion: v2
+name: sherpany
+description: A Helm chart for deploying Sherpany application
+version: 0.1.0

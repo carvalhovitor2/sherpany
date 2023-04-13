@@ -1,12 +1,15 @@
 system:
   name: "sherpany" # Application name
   web:
-    image: ""
+    image: "437472557821.dkr.ecr.eu-central-1.amazonaws.com/sherpany-web:latest"
     replicaCount: 1 # Number of replicas for the web deployment
+    port: 8000
+    size: "5Gi"
   db:
-    image: ""
+    image: "postgres"
     user: postgres # Database user
     database: pollsdb # Database name
     host: postgres-db # Database host
     port: 5432 # Database port
+    size: "20Gi"
 
