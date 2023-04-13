@@ -4,10 +4,10 @@ module "nlb" {
 
   name = var.system
 
-  load_balancer_type = "network"
-
-  vpc_id  = module.vpc.vpc_id
-  subnets = module.vpc.public_subnets
+  load_balancer_type               = "network"
+  enable_cross_zone_load_balancing = true
+  vpc_id                           = module.vpc.vpc_id
+  subnets                          = module.vpc.public_subnets
 
   target_groups = [
     {
