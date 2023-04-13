@@ -196,14 +196,11 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
   
     - name: Tag and push container image to ECR
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        tags: |
-          ${{ steps.login-ecr.outputs.registry }}/sherpany/web:${{ github.sha }}
-          ${{ steps.login-ecr.outputs.registry }}/sherpany/web:latest
-        load: true
+      run: |
+        docker tag sherpany/web:latest ${{ steps.login-ecr.outputs.registry }}/sherpany/web:${{ github.sha }}
+        docker tag sherpany/web:latest ${{ steps.login-ecr.outputs.registry }}/sherpany/web:latest
+        docker push ${{ steps.login-ecr.outputs.registry }}/sherpany/web:${{ github.sha }}
+        docker push ${{ steps.login-ecr.outputs.registry }}/sherpany/web:latest
 
 
         #
