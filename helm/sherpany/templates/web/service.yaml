@@ -1,13 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.system.name }}-web
+  namespace: "{{ .Values.system.name }}"
+  name: "{{ .Values.system.name }}-web"
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-type: "alb"
 spec:
   type: LoadBalancer
   selector:
-    app: {{ .Values.system.name }}-web
+    app: "{{ .Values.system.name }}-web"
   ports:
     - name: http
       protocol: TCP

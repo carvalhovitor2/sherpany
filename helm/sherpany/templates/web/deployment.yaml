@@ -1,23 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.system.name }}-web
+  namespace: "{{ .Values.system.name }}"
+  name: "{{ .Values.system.name }}-web"
   labels:
-    app: {{ .Values.system.name }}-web
+    app: "{{ .Values.system.name }}-web"
 spec:
   replicas: {{ .Values.system.web.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Values.system.name }}-web
+      app: "{{ .Values.system.name }}-web"
   template:
     metadata:
       labels:
-        app: {{ .Values.system.name }}-web
+        app: "{{ .Values.system.name }}-web"
     spec:
       containers:
       - name: web
-        image: {{ .Values.web.image }}
-        imagePullPolicy: ifNotPresent
+        image: "{{ .Values.system.web.image }}"
+        imagePullPolicy: IfNotPresent
         command:
         - sh
         - -c
@@ -31,27 +32,26 @@ spec:
         - name: SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.system.name }}-secrets
+              name: "{{ .Values.system.name }}-secrets"
               key: secret-key
         
         - name: POSTGRES_USER
-          value: {{ .Values.system.db.user }}
+          value: "{{ .Values.system.db.user }}"
 
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.system.name }}-secrets
+              name: "{{ .Values.system.name }}-secrets"
               key: postgres-password
        
         - name: POSTGRES_DB
-          value: {{ .Values.system.db.database }}
+          value: "{{ .Values.system.db.database }}"
 
         - name: POSTGRES_HOST
-          value: {{ .Values.system.db.host }}
+          value: "{{ .Values.system.db.host }}"
 
         - name: POSTGRES_PORT
-          value: {{ .Values.system.db.port }}
-          
+          value: "{{ .Values.system.db.port }}"          
         ports:
         - containerPort: {{ .Values.system.web.port }}
         volumeMounts:
@@ -60,4 +60,4 @@ spec:
       volumes:
       - name: static-volume
         persistentVolumeClaim:
-          claimName: {{ .Values.system.name }}-web-pvc
+          claimName: "{{ .Values.system.name }}-web-pvc"

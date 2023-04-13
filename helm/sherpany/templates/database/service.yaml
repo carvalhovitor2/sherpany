@@ -1,13 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: "{{ .Values.system.name }}"
   name: "{{ .Values.system.name }}-db"
   labels:
     app: "{{ .Values.system.name }}-db"
 spec:
   type: ClusterIP
   ports:
-    - port: "{{ .Values.system.db.port }}"
+    - port: {{ .Values.system.db.port }}
       targetPort: db
       protocol: TCP
       name: db

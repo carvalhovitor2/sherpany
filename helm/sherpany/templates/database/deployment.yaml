@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: "{{ .Values.system.name }}"
   name: "{{ .Values.system.name }}-db"
   labels:
     app: "{{ .Values.system.name }}-db"
@@ -16,7 +17,8 @@ spec:
     spec:
       containers:
         - name: db
-          image: "{{ .Values.db.image }}"
+          image: "{{ .Values.system.db.image }}"
+          imagePullPolicy: IfNotPresent
           env:
             - name: POSTGRES_DB
               value: "{{ .Values.system.db.user }}"
@@ -32,7 +34,7 @@ spec:
               mountPath: /var/lib/postgresql/data/
           ports:
             - name: db
-              containerPort: 
+              containerPort: {{ .Values.system.db.port }}
           livenessProbe:
             exec:
               command:
