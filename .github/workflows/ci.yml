@@ -183,14 +183,17 @@ jobs:
   
     - name: Load container image from tar file
       run: docker load -i artifact/web.tar
-  
+ 
+    - name: Set up AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.API_KEY }}
+        aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+        aws-region: eu-central-1
+   
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-      with:
-        access-key-id: ${{ secrets.API_KEY }}
-        secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
-        region: eu-central-1
   
     - name: Tag and push container image to ECR
       uses: docker/build-push-action@v2
