@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  validations:
+  sanity:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -25,7 +25,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
 
   terraform_plan:
-    needs: validations
+    needs: sanity
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -53,7 +53,7 @@ jobs:
         path: terraform/plan.json
 
 
-  infrastructure_assessment:
+  terraform_assess:
     if: github.event_name == 'pull_request'
     needs: terraform_plan
     runs-on: ubuntu-latest
@@ -112,13 +112,97 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.API_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
 
-        #
-        #  build_images:
-        #    needs: terraform_apply
-        #    runs_on: ubuntu-latest
-        #    steps:
-        #    - name: Checkout repository
-        #      uses: actions/checkout@v2
+
+# Build, test, release, deploy
+
+  build_images:
+    needs: sanity
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+  
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+  
+    - name: Cache Docker layers
+      uses: actions/cache@v2
+      with:
+        path: /tmp/.build-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+  
+    - name: Build Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: polls/
+        tags: sherpany/web:latest
+        load: true
+        cache-from: type=local,src=/tmp/.build-cache
+        cache-to: type=local,dest=/tmp/.build-cache
+  
+    - name: Save container image as a tar file
+      run: docker save sherpany/web:latest -o web.tar
+  
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: web
+        path: web.tar
+  
+
+  scan_image:
+    needs: build_images
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: web
+        path: artifact
+  
+    - name: Load container image from tar file
+      run: docker load -i artifact/web.tar
+  
+    - name: Scan container image for vulnerabilities
+      run: |
+        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image --exit-code 1 --severity CRITICAL sherpany/web:latest --ignore-unfixed
+
+
+
+  push_image:
+    needs: scan_image
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: web
+        path: artifact
+  
+    - name: Load container image from tar file
+      run: docker load -i artifact/web.tar
+ 
+    - name: Set up AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.API_KEY }}
+        aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+        aws-region: eu-central-1
+   
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+  
+    - name: Tag and push container image to ECR
+      run: |
+        docker tag sherpany/web:latest ${{ steps.login-ecr.outputs.registry }}/sherpany-web:${{ github.sha }}
+        docker tag sherpany/web:latest ${{ steps.login-ecr.outputs.registry }}/sherpany-web:latest
+        docker push ${{ steps.login-ecr.outputs.registry }}/sherpany-web:${{ github.sha }}
+        docker push ${{ steps.login-ecr.outputs.registry }}/sherpany-web:latest
+
+
         #
         #
         #  helm_install:
