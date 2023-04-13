@@ -28,9 +28,3 @@ WORKDIR /usr/app
 COPY --from=build /usr/app/venv ./venv
 COPY . .
 ENV PATH="/usr/app/venv/bin:$PATH"
-
-CMD sh -c "python manage.py makemigrations && \
-           python manage.py migrate && \
-           python manage.py collectstatic --noinput && \
-           python manage.py loaddata fixtures/initial_data.json && \
-           uwsgi --ini uwsgi.ini"
