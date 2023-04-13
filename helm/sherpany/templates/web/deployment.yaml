@@ -18,16 +18,15 @@ spec:
       containers:
       - name: web
         image: "{{ .Values.system.web.image }}"
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         command:
         - sh
         - -c
-        - cd polls/ &&
-          python manage.py makemigrations &&
+        - python manage.py makemigrations &&
           python manage.py migrate &&
           python manage.py collectstatic --noinput &&
           python manage.py loaddata fixtures/initial_data.json &&
-          uwsgi --ini uwsgi.ini
+          uwsgi --uid 999 --gid 999 --ini uwsgi.ini
         env:
         - name: SECRET_KEY
           valueFrom:
@@ -37,6 +36,9 @@ spec:
         
         - name: POSTGRES_USER
           value: "{{ .Values.system.db.user }}"
+
+        - name: ALLOWED_HOSTS
+          value: "{{ .Values.system.web.allowed_hosts }}"
 
         - name: POSTGRES_PASSWORD
           valueFrom:

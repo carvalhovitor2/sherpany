@@ -21,7 +21,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: POSTGRES_DB
-              value: "{{ .Values.system.db.user }}"
+              value: "{{ .Values.system.db.database }}"
             - name: POSTGRES_USER
               value: "{{ .Values.system.db.user }}"
             - name: POSTGRES_PASSWORD
@@ -31,7 +31,7 @@ spec:
                   key: postgres-password
           volumeMounts:
             - name: db-data
-              mountPath: /var/lib/postgresql/data/
+              mountPath: /var/lib/postgresql/
           ports:
             - name: db
               containerPort: {{ .Values.system.db.port }}

@@ -3,14 +3,12 @@ kind: Service
 metadata:
   namespace: "{{ .Values.system.name }}"
   name: "{{ .Values.system.name }}-web"
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: "alb"
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: "{{ .Values.system.name }}-web"
   ports:
     - name: http
       protocol: TCP
-      port: {{ .Values.system.web.port }}
+      port: 80
       targetPort: {{ .Values.system.web.port }}

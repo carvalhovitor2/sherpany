@@ -5,6 +5,7 @@ system:
     replicaCount: 1 # Number of replicas for the web deployment
     port: 8000
     size: "5Gi"
+    allowed_hosts: [ "sherpany.sillydomain.com" ]
   db:
     image: "postgres"
     user: postgres # Database user
