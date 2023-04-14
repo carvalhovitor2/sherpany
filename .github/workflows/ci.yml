@@ -204,7 +204,7 @@ jobs:
         docker push ${{ steps.login-ecr.outputs.registry }}/sherpany-web:latest
 
   deploy:
-    needs: push_image
+    needs: push_image, terraform_apply
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
