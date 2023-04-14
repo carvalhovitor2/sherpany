@@ -5,7 +5,7 @@ metadata:
   name: "{{ .Values.system.name }}-web"
 spec:
   rules:
-  - host: "{{ .Values.system.name }}.sillydomain.com"
+  - host: "{{ .Values.system.web.allowed_hosts }}"
     http:
       paths:
       - path: /polls
