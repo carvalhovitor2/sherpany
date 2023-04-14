@@ -17,6 +17,9 @@ Sherpollny uses a Continuous Integration and Continuous Deployment (CI/CD) pipel
 
 The pipeline is divided into several jobs, each responsible for a specific stage of the CI/CD process. The jobs run on an Ubuntu Linux runner hosted by GitHub.
 
+![image](https://user-images.githubusercontent.com/52529073/231917416-5fc3497a-982a-4e2a-8bf2-48c729839ef9.png)
+
+
 ### Sanity
 
 The `sanity` job runs a script that validates the Terraform configuration files in the `terraform/` directory. The validation script checks the syntax and formatting of the configuration files, ensuring that they comply with the best practices and guidelines. This job runs on both pull requests and the main branch.
