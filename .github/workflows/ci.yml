@@ -224,5 +224,5 @@ jobs:
 
     - name: Helm Upgrade or Install
       run: |
-        helm install --replace ingress-controller ./helm/ingress-controller --namespace ingress-nginx
-        helm install --replace sherpany-release ./helm/sherpany --namespace sherpany
+        helm install --replace ingress-controller ./helm/ingress-controller 
+        helm install --replace sherpany-release ./helm/sherpany 
