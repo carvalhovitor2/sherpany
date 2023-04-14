@@ -56,3 +56,16 @@ The `push_image` job pushes the Docker image built in the `build_image` job to t
 ### Deploy
 
 The `deploy` job deploys the Sherpany web application to the EKS Kubernetes cluster using Helm. This job runs only on the main branch after both the `push_image` and `terraform_apply` jobs complete.
+
+## Secrets Management
+
+Secrets are an important aspect of any infrastructure or application. In this project, we have two types of secrets: secrets related to the CI/CD pipeline and secrets related to the Kubernetes workloads.
+
+### CI/CD Secrets
+
+All the secrets related to the CI/CD pipeline, such as API keys and other sensitive information, are stored in GitHub Secrets. These secrets are encrypted and can only be accessed by authorized users or actions. The CI/CD pipeline uses these secrets to authenticate and interact with the necessary resources such as AWS.
+
+### Kubernetes Secrets
+
+Secrets related to the Kubernetes workloads are stored as Kubernetes Secrets, created by Terraform. These secrets are used to securely store sensitive information such as credentials used by the application running on Kubernetes. These secrets can only be accessed by authorized pods running in the same namespace as the secret.
+
