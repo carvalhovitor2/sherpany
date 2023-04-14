@@ -200,8 +200,7 @@ jobs:
       run: |
         docker tag sherpany/web:latest ${{ steps.login-ecr.outputs.registry }}/sherpany-web:${{ github.sha }}
         docker tag sherpany/web:latest ${{ steps.login-ecr.outputs.registry }}/sherpany-web:latest
-        docker push ${{ steps.login-ecr.outputs.registry }}/sherpany-web:${{ github.sha }}
-        docker push ${{ steps.login-ecr.outputs.registry }}/sherpany-web:latest
+        docker push --all-tags ${{ steps.login-ecr.outputs.registry }}/sherpany-web
 
   deploy:
     needs: [ push_image, terraform_apply ]
