@@ -4,7 +4,7 @@ module "eks" {
 
   enable_irsa                    = false
   cluster_name                   = var.system
-  cluster_version                = "1.24"
+  cluster_version                = "1.25"
   cluster_encryption_config      = []
   cluster_endpoint_public_access = true
 
