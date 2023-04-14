@@ -13,6 +13,14 @@ To enable external access to the application pods, an ingress service and networ
 
 Overall, the infrastructure is designed to be secure, scalable, and highly available. Terraform is used to ensure that the infrastructure is reproducible and can be managed easily.
 
+### Remarks
+
+ - For HA, the subnets are spread across AZs, and the NLB has a ENI in each of the 3 AZs. Due to that, cross AZ load balancing can occur, so it has to be enabled on the NLB level otherwise some requets to the nlb might fail. 
+
+ - Nodes are divided into two node groups, one that uses on-demand instances and one that uses spot instances. Both are composed ASGs that automatically registers new instances to the load balancer. 
+ 
+ - EKS control-plane is publicly exposed, which is not ideal in a production environment for obvious reasons. It is only like this because making it private would obligate a private connection between the CI system and my VPC.
+
 ## CI/CD Pipeline
 
 Sherpollny uses a Continuous Integration and Continuous Deployment (CI/CD) pipeline to automate the build, test, and deployment process. The pipeline is defined in the `ci.yml` file located in the `.github/workflows` directory. The pipeline is triggered whenever code changes are pushed to the `main` branch or a pull request is opened against the `main` branch.
