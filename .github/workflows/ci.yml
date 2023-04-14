@@ -225,7 +225,5 @@ jobs:
 
     - name: Helm Upgrade or Install
       run: |
-        helm upgrade --install --wait --create-namespace ingress-controller ingress-controller ./helm/ingress-controller || \
-        helm install --wait --create-namespace ingress-controller ingress-controller ./helm/ingress-controller
-        helm upgrade --install --wait --create-namespace sherpany sherpany-release ./helm/sherpany || \
-        helm install --wait --create-namespace ingress-controller sherpany sherpany-release ./helm/sherpany
+        helm upgrade ingress-controller ingress-controller ./helm/ingress-controller
+        helm upgrade sherpany sherpany-release ./helm/sherpany 
