@@ -32,6 +32,9 @@ The `terraform_plan` job creates a plan of the changes to be made to the infrast
 
 The `terraform_assess` job checks the cost of the infrastructure changes proposed by the Terraform plan created in the `terraform_plan` job. It generates a diff report using the Infracost tool and posts it as a comment on the pull request. This job runs only on pull requests after the `terraform_plan` job completes.
 
+![image](https://user-images.githubusercontent.com/52529073/231917509-7cda0b77-3341-4d2a-92dd-8c3531431897.png)
+
+
 ### Terraform Apply
 
 The `terraform_apply` job applies the changes to the infrastructure based on the Terraform plan created in the `terraform_plan` job. This job runs only on the main branch after the `terraform_plan` job completes.
