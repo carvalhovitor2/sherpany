@@ -225,5 +225,5 @@ jobs:
 
     - name: Helm Upgrade or Install
       run: |
-        helm install --replace ingress-controller ingress-controller ./helm/ingress-controller
-        helm install --replace sherpany sherpany-release ./helm/sherpany 
+        helm install --replace ingress-controller ./helm/ingress-controller
+        helm install --replace sherpany-release ./helm/sherpany 
