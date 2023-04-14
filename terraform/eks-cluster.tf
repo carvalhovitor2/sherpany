@@ -21,6 +21,9 @@ module "eks" {
     aws-ebs-csi-driver = {
       most_recent = true
     }
+    velero = {
+      most_recent = true
+    }
   }
 
   vpc_id                    = module.vpc.vpc_id
