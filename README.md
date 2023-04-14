@@ -21,6 +21,11 @@ Overall, the infrastructure is designed to be secure, scalable, and highly avail
  
  - EKS control-plane is publicly exposed, which is not ideal in a production environment for obvious reasons. It is only like this because making it private would obligate a private connection between the CI system and my VPC.
 
+## Docker images
+
+Docker images (in that case just one image, the poll app) are built, scanned and release to the ECR private registry through the pipeline. I chose to make a few modifications to the source code of the poll app in order to remove some hard coded parameters and start using variables for those values.
+
+
 ## CI/CD Pipeline
 
 Sherpollny uses a Continuous Integration and Continuous Deployment (CI/CD) pipeline to automate the build, test, and deployment process. The pipeline is defined in the `ci.yml` file located in the `.github/workflows` directory. The pipeline is triggered whenever code changes are pushed to the `main` branch or a pull request is opened against the `main` branch.
