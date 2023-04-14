@@ -203,7 +203,8 @@ jobs:
         docker push ${{ steps.login-ecr.outputs.registry }}/sherpany-web:${{ github.sha }}
         docker push ${{ steps.login-ecr.outputs.registry }}/sherpany-web:latest
 
-    needs: build_images
+  deploy:
+    needs: push_image
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
