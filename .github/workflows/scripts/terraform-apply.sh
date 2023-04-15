@@ -1,5 +1,5 @@
 #!/bin/bash
 
 cd terraform/
-terraform init
+terraform init -upgrade
 terraform apply -input=false ../plan.out
