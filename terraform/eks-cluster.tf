@@ -2,7 +2,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 18.0"
 
-  enable_irsa                    = false
+  enable_irsa                    = true
   cluster_name                   = var.system
   cluster_version                = "1.25"
   cluster_encryption_config      = []
@@ -19,9 +19,6 @@ module "eks" {
       most_recent = true
     }
     aws-ebs-csi-driver = {
-      most_recent = true
-    }
-    velero = {
       most_recent = true
     }
   }
@@ -60,4 +57,17 @@ resource "kubernetes_namespace" "sherpany" {
       team = var.system
     }
   }
+}
+
+
+module "velero" {
+  source = "./modules/terraform-aws-eks-velero"
+
+  enabled = true
+
+  cluster_name                     = module.eks.cluster_id
+  cluster_identity_oidc_issuer     = module.eks.cluster_oidc_issuer_url
+  cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
+  aws_region                       = var.region
+  bucket_name                      = data.aws_s3_bucket.velero_backups.id
 }
