@@ -4,7 +4,6 @@ metadata:
   namespace: "{{ .Values.system.name }}"
   name: "{{ .Values.system.name }}-web"
   annotations:
-    kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt
 spec:
   tls:
