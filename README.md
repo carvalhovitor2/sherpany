@@ -1,13 +1,13 @@
 # Sherpany
-This repository is designed to contain my resolution of Sherpany's code challange
+This repository is designed to contain my resolution of Sherpany's code challenge
 
-Once everying is up, you can access the frontend app in https://sherpany.vitorcarvalho.es/polls 
+Once everything is up, you can access the frontend app in https://sherpany.vitorcarvalho.es/polls 
 
 ## Infrastructure
 
 ### General
 
-The infrastructure for Sherpollny is provisioned and managed through Terraform, a popular infrastructure-as-code (IaC) tool. The infrastructure is composed of a Virtual Private Cloud (VPC) with a CIDR range of 10.0.0.0/16 and is organized into nine subnets - three public, three private, and three database subnets.
+The infrastructure for Sherpany's poll app is provisioned and managed through Terraform, a popular infrastructure-as-code (IaC) tool. The infrastructure is composed of a Virtual Private Cloud (VPC) with a CIDR range of 10.0.0.0/16 and is organized into nine subnets - three public, three private, and three database subnets.
 
 Within the private subnets, an Amazon Elastic Kubernetes Service (EKS) cluster is provisioned, which is responsible for hosting and managing the application pods. The EKS cluster is deployed across the three private subnets, ensuring high availability and fault tolerance.
 ![image](https://user-images.githubusercontent.com/52529073/231918541-70551d3c-c3a9-428f-93dd-c8a3a128ca2d.png)
