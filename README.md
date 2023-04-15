@@ -90,3 +90,5 @@ Secrets related to the Kubernetes workloads are stored as Kubernetes Secrets, cr
 ## Backups
 
 Backups are handled by [Velero](https://velero.io/), an OpenSource kubernetes cluster backup solution and restores are easily done through it's CLI, thus no need for an actual backup script.They are stored in a separate s3 bucket which is created in the bootsrap terraform module.
+
+Since persistency in this scenario is achieved through the two PVCs (one for the DB and the other for the web app), having scheduled backups for those would be a possible scenario. It is also possible to backup whole namespaces with Velero, but since we are building everything with IaC or Helm Charts, configuration backups shouldn't be necessary.
