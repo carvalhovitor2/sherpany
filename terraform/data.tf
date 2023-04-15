@@ -12,3 +12,9 @@ data "aws_route53_zone" "vitorcarvalho" {
   name         = "vitorcarvalho.es."
   private_zone = false
 }
+
+
+# s3 backups
+data "aws_s3_bucket" "velero_backups" {
+  bucket = "my-sherpany-velero-backups"
+}

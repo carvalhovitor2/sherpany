@@ -4,7 +4,7 @@ module "eks_managed_node_group_spot" {
 
   name            = "${var.system}-spot-eks-mng"
   cluster_name    = module.eks.cluster_id
-  cluster_version = "1.24"
+  cluster_version = "1.25"
   iam_role_arn    = aws_iam_role.eks_nodes.arn
   create_iam_role = false
 
@@ -48,7 +48,7 @@ module "eks_managed_node_group_on_demand" {
 
   name            = "${var.system}-on-demand-eks-mng"
   cluster_name    = module.eks.cluster_id
-  cluster_version = "1.24"
+  cluster_version = "1.25"
   iam_role_arn    = aws_iam_role.eks_nodes.arn
   create_iam_role = false
 
