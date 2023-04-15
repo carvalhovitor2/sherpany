@@ -89,4 +89,4 @@ Secrets related to the Kubernetes workloads are stored as Kubernetes Secrets, cr
 
 ## Backups
 
-Backups are handled by [Velero](https://velero.io/), an OpenSource kubernetes cluster backup solution and restores are easily done through it's CLI, thus no need for an actual backup script.
+Backups are handled by [Velero](https://velero.io/), an OpenSource kubernetes cluster backup solution and restores are easily done through it's CLI, thus no need for an actual backup script.They are stored in a separate s3 bucket which is created in the bootsrap terraform module.
