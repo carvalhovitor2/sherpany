@@ -71,3 +71,26 @@ module "velero" {
   aws_region                       = var.region
   bucket_name                      = data.aws_s3_bucket.velero_backups.id
 }
+
+module "cert_manager" {
+  source = "./modules/terraform-aws-eks-cert-manager/"
+
+  enabled = true
+
+  cluster_name                     = module.eks.cluster_id
+  cluster_identity_oidc_issuer     = module.eks.cluster_oidc_issuer_url
+  cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
+
+  dns01 = [
+    {
+      name           = "letsencrypt"
+      namespace      = var.system
+      kind           = "ClusterIssuer"
+      dns_zone       = "vitorcarvalho.es"
+      region         = var.region
+      secret_key_ref = "letsencrypt"
+      acme_server    = "https://acme-v02.api.letsencrypt.org/directory"
+      acme_email     = "vitoracarvalho@gmail.com"
+    },
+  ]
+}

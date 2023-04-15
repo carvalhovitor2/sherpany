@@ -29,7 +29,13 @@ module "nlb" {
       port               = 80
       protocol           = "TCP"
       target_group_index = 0
+    },
+    {
+      port               = 443
+      protocol           = "TCP"
+      target_group_index = 1
     }
+
   ]
 
   tags = {
@@ -48,5 +54,17 @@ resource "aws_autoscaling_attachment" "http_nlb_attachment_spot" {
 resource "aws_autoscaling_attachment" "http_nlb_attachment_on_demand" {
   autoscaling_group_name = module.eks_managed_node_group_on_demand.node_group_autoscaling_group_names[0]
   lb_target_group_arn    = module.nlb.target_group_arns[0] # HTTP target group
+}
+
+# Attach the HTTP target group to the first EKS Managed Node Group (Spot Instances)
+resource "aws_autoscaling_attachment" "https_nlb_attachment_spot" {
+  autoscaling_group_name = module.eks_managed_node_group_spot.node_group_autoscaling_group_names[0]
+  lb_target_group_arn    = module.nlb.target_group_arns[1] # HTTP target group
+}
+
+# Attach the HTTP target group to the second EKS Managed Node Group (On-Demand Instances)
+resource "aws_autoscaling_attachment" "https_nlb_attachment_on_demand" {
+  autoscaling_group_name = module.eks_managed_node_group_on_demand.node_group_autoscaling_group_names[0]
+  lb_target_group_arn    = module.nlb.target_group_arns[1] # HTTP target group
 }
 
