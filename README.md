@@ -1,6 +1,8 @@
 # Sherpany
 This repository is designed to contain my resolution of Sherpany's code challange
 
+Once everying is up, you can access the frontend app in https://sherpany.vitorcarvalho.es/polls 
+
 ## Infrastructure
 
 ### General
