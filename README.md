@@ -14,7 +14,7 @@ Within the private subnets, an Amazon Elastic Kubernetes Service (EKS) cluster i
 To enable external access to the application pods, an ingress service and network load balancer (NLB) are provisioned. The ingress service routes incoming requests to the appropriate pods based on the URL path, while the NLB distributes traffic across the nodes in the EKS cluster. DNS management is integrated into the infrastructure, with the sherpany.vitorcarvalho.es domain name being created and pointed to the NLB. 
 
 #### SSL
-SSL termination happens in the ingress-controllers and PKI certificates are requested by the cert-manager CRD.
+Load Balancers have 443 TCP listeners with SSL passthrough since SSL termination happens in the ingress-controllers. PKI certificates are requested and managed by the cert-manager CRD.
 
 Overall, the infrastructure is designed to be secure, scalable, and highly available. Terraform is used to ensure that the infrastructure is reproducible and can be managed easily.
 
