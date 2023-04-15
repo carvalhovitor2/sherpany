@@ -16,7 +16,7 @@ module "eks_managed_node_group_spot" {
 
   min_size     = 1
   max_size     = 3
-  desired_size = 2
+  desired_size = 3
 
   instance_types = [
     "t3a.small",
