@@ -4,6 +4,7 @@ metadata:
   namespace: "{{ .Values.system.name }}"
   name: "{{ .Values.system.name }}-web"
 spec:
+  ingressClassName: nginx
   rules:
   - host: "{{ .Values.system.web.allowed_hosts }}"
     http:
